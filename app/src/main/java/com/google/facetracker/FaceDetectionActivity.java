@@ -30,44 +30,46 @@ import java.io.IOException;
 public final class FaceDetectionActivity extends AppCompatActivity {
 
     private static final String TAG = "FaceTracker";
+    private static final int RC_HANDLE_GMS = 9001;
 
+    // permission request codes need to be < 256
+    private static final int RC_HANDLE_CAMERA_PERM = 2;
+
+    //initialising camera resources
     private CameraSource mCameraSource = null;
-
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
     Button confirm ;
 
-    private static final int RC_HANDLE_GMS = 9001;
-    // permission request codes need to be < 256
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
-
-    //==============================================================================================
-    // Activity Methods
-    //==============================================================================================
 
     /**
      * Initializes the UI and initiates the creation of a face detector.
      */
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_face_detection);
-
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
-
-        confirm = (Button) findViewById(R.id.confirmButton);
-
+        initialise();
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
+        int cameraPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (cameraPermission == PackageManager.PERMISSION_GRANTED) {
             createCameraSource();
         } else {
             requestCameraPermission();
         }
     }
+
+    private void initialise(){
+
+        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
+        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
+        confirm = (Button) findViewById(R.id.confirmButton);
+
+    }
+
 
     public void startEmotionDetection (View v){
         Intent i = new Intent(this, EmotionDetection.class);
@@ -189,6 +191,7 @@ public final class FaceDetectionActivity extends AppCompatActivity {
      *                     or {@link PackageManager#PERMISSION_DENIED}. Never null.
      * @see #requestPermissions(String[], int)
      */
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
@@ -229,6 +232,7 @@ public final class FaceDetectionActivity extends AppCompatActivity {
      * (e.g., because onResume was called before the camera source was created), this will be called
      * again when the camera source is created.
      */
+
     private void startCameraSource() {
 
         // check that the device has play services available.

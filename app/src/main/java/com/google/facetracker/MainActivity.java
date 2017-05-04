@@ -11,22 +11,23 @@ public class MainActivity extends AppCompatActivity {
     Button imageDetectionOptionButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        realTimeDetectionOptionButton = (Button) findViewById(R.id.realTimeDetectionOptionButton);
-        imageDetectionOptionButton = (Button) findViewById(R.id.imageDetectionOptionButton);
+        initialise();
 
+
+        //real time option button takes to the face detection activity
         realTimeDetectionOptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), FaceDetectionActivity.class);
-                startActivity(intent);
+                startActivity(intent);    //to start the activity specified by the Intent"
             }
         });
 
+        //image detection option button takes to image detection activity
         imageDetectionOptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,5 +37,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    // initialising mode buttons, for the two modes of emotion detection
+    protected void initialise(){
+        realTimeDetectionOptionButton = (Button) findViewById(R.id.realTimeDetectionOptionButton);
+        imageDetectionOptionButton = (Button) findViewById(R.id.imageDetectionOptionButton);
+    }
+
 
 }
